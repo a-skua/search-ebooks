@@ -33,7 +33,7 @@ const html = `
 `
 
 func TestOreillySearch(t *testing.T) {
-	var store OreillyJP
+	var store oreillyJP
 	data := strings.NewReader(html)
 	books, err := store.Scrape(data, "HTML")
 	if err != nil {
@@ -64,7 +64,7 @@ func TestOreillySearch(t *testing.T) {
 }
 
 func TestOreillySearchCheckNum(t *testing.T) {
-	var store OreillyJP
+	var store oreillyJP
 
 	data := strings.NewReader(html)
 	books, err := store.Scrape(data, "HTML")
@@ -104,5 +104,13 @@ func TestOreillySearchCheckNum(t *testing.T) {
 	}
 	if l := len(books); l != 4 {
 		t.Error("length is not 4:", l)
+	}
+}
+
+func TestOreillyURL(t *testing.T) {
+	var store oreillyJP
+	url := store.URL()
+	if url != "https://www.oreilly.co.jp/ebook/" {
+		t.Error("not match URL:")
 	}
 }

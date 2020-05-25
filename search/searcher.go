@@ -12,12 +12,19 @@ type Book struct {
 	ISBN, Title, ImageURL, Price string
 }
 type Search interface {
+	URL() string
 	Scrape(io.Reader, string) ([]Book, error)
 }
 
-type OreillyJP struct{}
+func GetStores() []Search {
+	return []Search{
+		oreillyJP{},
+	}
+}
 
-func (OreillyJP) Scrape(data io.Reader, word string) ([]Book, error) {
+type oreillyJP struct{}
+
+func (oreillyJP) Scrape(data io.Reader, word string) ([]Book, error) {
 	doc, err := goquery.NewDocumentFromReader(data)
 	if err != nil {
 		return nil, err
@@ -38,4 +45,8 @@ func (OreillyJP) Scrape(data io.Reader, word string) ([]Book, error) {
 		}
 	})
 	return books, nil
+}
+
+func (oreillyJP) URL() string {
+	return "https://www.oreilly.co.jp/ebook/"
 }
